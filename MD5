@@ -1,0 +1,15 @@
+891c4605820a85ae7eeb7b991e6b373a *DESCRIPTION
+98c71b5eae0ac8dabb055bd8883b8398 *LICENSE
+e672bb58a23a39ce7c550bb653d3bc65 *NAMESPACE
+259b30a25ac58f9406f070ae22593732 *R/gifski.R
+8846e38762deb54e2574647cf0b12907 *configure
+2f6512ea32c6cd09baf0f48ed637346b *man/gifski.Rd
+ada9baa9d9ed4fe71b3504629797ca60 *src/Makevars.in
+6c2085165221cd556d40df0694c39afd *src/Makevars.win
+d0ca1ca07434d0e57f84ce8e6c0ef9c3 *src/Makevars.win.rust
+e1ed47a9045c24085b8483dac937fc9e *src/myrustlib/Cargo.lock
+4157a8c7a084136ebc1690b239aef306 *src/myrustlib/Cargo.toml
+f13ed3147cfeef81c3fc53cf147c2f2a *src/myrustlib/gifski.h
+f584284e4d04266bfacd1147c8fcf397 *src/myrustlib/src/lib.rs
+baec24ba343362316c0e4a511b151cf2 *src/wrapper.c
+31a97fc88c7db76e0940dafbd11dd73e *tools/winlibs.R
