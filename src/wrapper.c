@@ -1,6 +1,8 @@
 #define R_NO_REMAP
 #define STRICT_R_HEADERS
 #include <Rinternals.h>
+#include <R_ext/Rdynload.h>
+#include <R_ext/Visibility.h>
 
 // Import C headers for rust API
 #include <pthread.h>
@@ -8,15 +10,15 @@
 
 /* data to pass to encoder thread */
 typedef struct {
-  const char * path;
-  gifski * g;
+  const char *path;
+  GifskiError err;
+  gifski *g;
 } gifski_encoder_thread_info;
 
 /* gifski_write() blocks until main thread calls gifski_end_adding_frames() */
-void * gifski_encoder_thread(void * data){
+static void * gifski_encoder_thread(void * data){
   gifski_encoder_thread_info * info = data;
-  gifski_write(info->g, info->path);
-  gifski_drop(info->g);
+  info->err = gifski_write(info->g, info->path);
   return NULL;
 }
 
@@ -32,20 +34,22 @@ SEXP R_png_to_gif(SEXP png_files, SEXP gif_file, SEXP width, SEXP height, SEXP d
   settings.once = !Rf_asLogical(loop);
 
   /* init in main thread */
-  gifski * g = gifski_new(&settings);
+  gifski *g = gifski_new(&settings);
 
   /* create encoder thread; TODO: maybe we can use multiple encoder threads? */
   pthread_t encoder_thread;
-  gifski_encoder_thread_info info = {CHAR(STRING_ELT(gif_file, 0)), g};
+  gifski_encoder_thread_info info = {CHAR(STRING_ELT(gif_file, 0)), GIFSKI_OK, g};
   if(pthread_create(&encoder_thread, NULL, gifski_encoder_thread, &info))
     Rf_error("Failed to create encoder thread");
 
   /* add png frames in main thread */
   for(size_t i = 0; i < Rf_length(png_files); i++){
+    if(info.err != GIFSKI_OK)
+      goto cleanup;
     if(gifski_add_frame_png_file(g, i, CHAR(STRING_ELT(png_files, i)), Rf_asInteger(delay)) != GIFSKI_OK)
       Rprintf("Failed to add frame %d\n", i);
     if(Rf_asLogical(progress))
-      Rprintf("\rFrame %d (%d%%)", i, (i+1) * 100 / Rf_length(png_files));
+      Rprintf("\rFrame %d (%d%%)", (i+1), (i+1) * 100 / Rf_length(png_files));
   }
 
   /* This will finalize the encoder thread as well */
@@ -58,6 +62,11 @@ SEXP R_png_to_gif(SEXP png_files, SEXP gif_file, SEXP width, SEXP height, SEXP d
   /* wait for the encoder thread to finish */
   if(pthread_join(encoder_thread, NULL))
     Rf_error("Failed to join encoder_thread");
+
+cleanup:
+  gifski_drop(g);
+  if(info.err != GIFSKI_OK)
+    Rf_error("Failure writing image %s", info.path);
   return gif_file;
 }
 
@@ -67,7 +76,7 @@ static const R_CallMethodDef CallEntries[] = {
   {NULL, NULL, 0}
 };
 
-void R_init_gifski(DllInfo *dll) {
+attribute_visible void R_init_gifski(DllInfo *dll) {
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
 }

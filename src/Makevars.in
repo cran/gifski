@@ -1,10 +1,10 @@
 LIBDIR = myrustlib/target/release
 STATLIB = $(LIBDIR)/libmyrustlib.a
-PKG_CFLAGS = -pthread
+PKG_CFLAGS = -pthread $(C_VISIBILITY)
 PKG_LIBS = -L$(LIBDIR) -lmyrustlib -lresolv -pthread
 CARGO = @cargobin@
 
-all: clean
+#all: clean
 
 $(SHLIB): $(STATLIB)
 

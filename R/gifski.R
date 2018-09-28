@@ -29,13 +29,15 @@
 #'
 gifski <- function(png_files, gif_file = 'animation.gif', width = 800, height = 600, delay = 1, loop = TRUE, progress = TRUE){
   png_files <- normalizePath(png_files, mustWork = TRUE)
-  stopifnot(is.character(gif_file))
+  gif_file <- normalizePath(gif_file, mustWork = FALSE)
+  if(!file.exists(dirname(gif_file)))
+    stop("Target directory does not exist:", dirname(gif_file))
   width <- as.integer(width)
   height <- as.integer(height)
   delay <- as.integer(delay * 100)
   loop <- as.logical(loop)
   progress <- as.logical(progress)
-  .Call(R_png_to_gif, png_files, gif_file, width, height, delay, loop, progress)
+  .Call(R_png_to_gif, enc2utf8(png_files), enc2utf8(gif_file), width, height, delay, loop, progress)
 }
 
 #' @export
@@ -69,8 +71,7 @@ save_gif <- function(expr, gif_file = 'animation.gif', width = 800, height = 600
   filename <- file.path(imgdir, "tmpimg_%05d.png")
   grDevices::png(filename, width = width, height = height, ...)
   graphics::par(ask = FALSE)
-  eval(expr)
-  grDevices::dev.off()
+  tryCatch(eval(expr), finally = grDevices::dev.off())
   images <- list.files(imgdir, pattern = 'tmpimg_\\d{5}.png', full.names = TRUE)
   gifski(images, gif_file = gif_file, width = width, height = height, delay = delay, loop = loop, progress = progress)
 }
