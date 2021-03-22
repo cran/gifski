@@ -11,8 +11,9 @@
 #' @param width gif width in pixels
 #' @param height gif height in pixel
 #' @param delay time to show each image in seconds
-#' @param loop should the gif play forever (FALSE to only play once)
-#' @param progress show progress bar
+#' @param loop if the gif should be repeated. Set to FALSE to only play
+#' once, or a number to indicate how many times to repeat after the first.
+#' @param progress print some verbose status output
 #' @examples
 #' # Manually convert png files to gif
 #' png_path <- file.path(tempdir(), "frame%03d.png")
@@ -27,17 +28,22 @@
 #' unlink(png_files)
 #' \donttest{utils::browseURL(gif_file)}
 #'
-gifski <- function(png_files, gif_file = 'animation.gif', width = 800, height = 600, delay = 1, loop = TRUE, progress = TRUE){
+gifski <- function(png_files, gif_file = 'animation.gif', width = 800, height = 600,
+                   delay = 1, loop = TRUE, progress = TRUE){
   png_files <- normalizePath(png_files, mustWork = TRUE)
   gif_file <- normalizePath(gif_file, mustWork = FALSE)
   if(!file.exists(dirname(gif_file)))
     stop("Target directory does not exist:", dirname(gif_file))
   width <- as.integer(width)
   height <- as.integer(height)
-  delay <- as.integer(delay * 100)
-  loop <- as.logical(loop)
+  delay <- as.numeric(delay)
+  repeats <- if(is.logical(loop) || loop == 0){
+    isTRUE(loop) - 1 # Set to negative to disable loop
+  } else {
+    as.integer(loop)
+  }
   progress <- as.logical(progress)
-  .Call(R_png_to_gif, enc2utf8(png_files), enc2utf8(gif_file), width, height, delay, loop, progress)
+  .Call(R_png_to_gif, enc2utf8(png_files), enc2utf8(gif_file), width, height, delay, repeats, progress)
 }
 
 #' @export
