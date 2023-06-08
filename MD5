@@ -1,14 +1,14 @@
-d0c3c24679b091149e352e54326c034d *DESCRIPTION
+1438135769c6230e217fa57e79c0e59f *DESCRIPTION
 98c71b5eae0ac8dabb055bd8883b8398 *LICENSE
 e672bb58a23a39ce7c550bb653d3bc65 *NAMESPACE
-2c74949b9ab5b84b73116b7d9c00b0f9 *NEWS
+681b850d17832bab0600b9e1edfcd26f *NEWS
 df03253b513e835f9cbd787ce62ef164 *R/gifski.R
 94309719d8a082bfc9477f12871360c0 *configure
 4eba4ec5871adb1d97482b59456724f9 *configure.ucrt
 e8b22b63347a28c91d6c5517d3077388 *man/gifski.Rd
 f0d8084479397d26eba495d5ce7929b5 *src/Makevars
 ebe3a857af8a002b84dd898fb93f2a1c *src/Makevars.win
-c51f21de92c9cf0a0df60ea7ffbfb088 *src/Makevars.win.build
+aa384f640bf53799967358fc5e22054d *src/Makevars.win.build
 e67e1ab1c2b6358bffe2fc4f73ee5b7a *src/myrustlib/Cargo.lock
 f152300c2d8c99a5e55d116f69f70238 *src/myrustlib/Cargo.toml
 9211952d780a0c5022b2d6726442e2e6 *src/myrustlib/gifski.h

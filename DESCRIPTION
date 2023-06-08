@@ -1,7 +1,7 @@
 Package: gifski
 Type: Package
 Title: Highest Quality GIF Encoder
-Version: 1.12.0
+Version: 1.12.0-1
 Authors@R: c(
     person("Jeroen", "Ooms", ,"jeroen@berkeley.edu", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0002-4035-0289")),
@@ -19,9 +19,9 @@ RoxygenNote: 7.1.1
 Suggests: ggplot2, gapminder
 Language: en-US
 NeedsCompilation: yes
-Packaged: 2023-05-19 21:39:34 UTC; jeroen
+Packaged: 2023-06-08 17:15:38 UTC; jeroen
 Author: Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>),
   Kornel Lesiński [cph] (Gifski Rust library)
 Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
 Repository: CRAN
-Date/Publication: 2023-05-19 22:20:02 UTC
+Date/Publication: 2023-06-08 18:20:05 UTC
